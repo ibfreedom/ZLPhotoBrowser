@@ -66,7 +66,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?
     
-    private var pri_columnCount: Int = 4
+    private var pri_columnCount: Int = 5
     /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```
     /// iPhone landscape mode: columnCount += 2.
