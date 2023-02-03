@@ -107,7 +107,7 @@ extension MHPickerViewController {
         ZLPhotoConfiguration.default().compressBytes            = 150 * 1024
         ZLPhotoConfiguration.default().maxSelectCount           = maxLimit
         ZLPhotoConfiguration.default().allowPreviewPhotos       = options.intersection(.allowsPreview) == .allowsPreview
-        
+         
         // show on target
         let obj: ZLPhotoPreviewSheet = .init(results: results)
         obj.selectImageBlock = { (models, isOriginal) in

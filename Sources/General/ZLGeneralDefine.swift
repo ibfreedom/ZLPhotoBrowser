@@ -187,6 +187,9 @@ func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
 
 func zl_debugPrint(_ message: Any...) {
 //    message.forEach { debugPrint($0) }
+    #if DEBUG
+    print(message.map { "\($0)" }.joined(separator: " "))
+    #endif
 }
 
 func zlLoggerInDebug(_ lastMessage: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {

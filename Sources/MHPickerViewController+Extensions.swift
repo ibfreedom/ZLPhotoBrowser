@@ -90,12 +90,12 @@ extension MHPickerViewController.Options {
     
     /// 允许资源大小
     public static var allowsBytes: Self {
-        return .init(rawValue: 1 << 5)
+        return .init(rawValue: 1 << 6)
     }
     
     /// 允许预览
     public static var allowsPreview: Self {
-        return .init(rawValue: 1 << 5)
+        return .init(rawValue: 1 << 7)
     }
   
 }

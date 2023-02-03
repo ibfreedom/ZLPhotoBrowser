@@ -30,7 +30,7 @@ import Photos
 public class ZLPhotoManager: NSObject {
     
     /// Save image to album.
-    @objc public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
+    @objc public class func saveImageToAlbum(image: UIImage, callbackQueue: DispatchQueue = .main, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
