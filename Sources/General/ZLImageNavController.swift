@@ -33,7 +33,7 @@ class ZLImageNavController: UINavigationController {
     
     var arrSelectedModels: [ZLPhotoModel] = []
     
-    var selectImageBlock: (() -> Void)?
+    var selectImageBlock: ((_ hudStyle: ZLProgressHUD.HUDStyle) -> Void)?
     
     var cancelBlock: (() -> Void)?
     

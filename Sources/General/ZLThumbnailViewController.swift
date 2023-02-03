@@ -111,7 +111,7 @@ class ZLThumbnailViewController: UIViewController {
         _btn.titleLabel?.numberOfLines = 1
         _btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         _btn.contentHorizontalAlignment = .left
-        _btn.setImage(.zl.getImage("zl_btn_unselected")?.zl.resize(to: .init(width: 18.0, height: 18.0)).zl.withTint(color: .zl.bottomToolViewBtnNormalTitleColor), for: .normal)
+        _btn.setImage(.zl.getImage("zl_btn_unselected")?.zl.resize(to: .init(width: 18.0, height: 18.0)).zl.withTint(color: .zl.bottomToolPlaceholderColor), for: .normal)
         _btn.setImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 18.0, height: 18.0)), for: .selected)
         _btn.setImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 18.0, height: 18.0)), for: [.selected, .highlighted])
         _btn.setTitle("压缩", for: .normal)
@@ -270,7 +270,7 @@ class ZLThumbnailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
         
         if ZLPhotoConfiguration.default().allowSlideSelect {
@@ -538,8 +538,8 @@ class ZLThumbnailViewController: UIViewController {
     private func shouldShowBottomToolBar() -> Bool {
         let config = ZLPhotoConfiguration.default()
         let condition1 = config.editAfterSelectThumbnailImage &&
-            config.maxSelectCount == 1 &&
-            (config.allowEditImage || config.allowEditVideo)
+        config.maxSelectCount == 1 &&
+        (config.allowEditImage || config.allowEditVideo)
         let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
         let condition3 = !config.allowPreviewPhotos && config.maxSelectCount == 1
         if condition1 || condition2 || condition3 {
@@ -567,6 +567,10 @@ class ZLThumbnailViewController: UIViewController {
     /// 是否压缩图片
     /// - Parameter sender: UIButton
     @objc private func compressActionHandler(_ sender: UIButton) {
+        sender.imageView?.layer.removeAllAnimations()
+        if sender.isSelected == false, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect == true {
+            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
+        }
         sender.isSelected.toggle()
         (navigationController as? ZLImageNavController)?.isSelectedOriginal = sender.isSelected == false
         // 刷新UI
@@ -577,10 +581,10 @@ class ZLThumbnailViewController: UIViewController {
         let nav = navigationController as? ZLImageNavController
         if let block = ZLPhotoConfiguration.default().operateBeforeDoneAction {
             block(self) { [weak nav] in
-                nav?.selectImageBlock?()
+                nav?.selectImageBlock?(ZLPhotoUIConfiguration.default().hudStyle)
             }
         } else {
-            nav?.selectImageBlock?()
+            nav?.selectImageBlock?(ZLPhotoUIConfiguration.default().hudStyle)
         }
     }
     
@@ -824,9 +828,7 @@ class ZLThumbnailViewController: UIViewController {
             if nav.isSelectedOriginal == true {
                 totalUnitCount = nav.arrSelectedModels.reduce(0, { $0 + $1.asset.zl.fileSize })
             } else {
-                let images = nav.arrSelectedModels.filter { $0.type == .image }
-                let others = nav.arrSelectedModels.filter { $0.type != .image }
-                totalUnitCount = images.count * ZLPhotoConfiguration.default().compressBytes + others.reduce(0, { $0 + $1.asset.zl.fileSize })
+                totalUnitCount = nav.arrSelectedModels.reduce(0, { $0 + $1.compressBytes })
             }
             let bytes: String = ByteCountFormatter.string(fromByteCount: Int64(totalUnitCount), countStyle: .file).replacingOccurrences(of: " ", with: "")
             bytesLabel.text = "已选择\(nav.arrSelectedModels.count)个文件(\(bytes))"
@@ -1226,18 +1228,18 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let config = ZLPhotoConfiguration.default()
         
         let canEditImage = config.editAfterSelectThumbnailImage &&
-            config.allowEditImage &&
-            config.maxSelectCount == 1 &&
-            model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
+        config.allowEditImage &&
+        config.maxSelectCount == 1 &&
+        model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
         
         let canEditVideo = (config.editAfterSelectThumbnailImage &&
-            config.allowEditVideo &&
-            model.type == .video &&
-            config.maxSelectCount == 1) ||
-            (config.allowEditVideo &&
-                model.type == .video &&
-                !config.allowMixSelect &&
-                config.cropVideoAfterSelectThumbnail)
+                            config.allowEditVideo &&
+                            model.type == .video &&
+                            config.maxSelectCount == 1) ||
+        (config.allowEditVideo &&
+         model.type == .video &&
+         !config.allowMixSelect &&
+         config.cropVideoAfterSelectThumbnail)
         
         // 当前未选择图片 或已经选择了一张并且点击的是已选择的图片
         let nav = navigationController as? ZLImageNavController

@@ -70,18 +70,34 @@ class ZLPhotoPreviewController: UIViewController {
     
     private var navBlurView: UIVisualEffectView?
     
-    private lazy var backBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_navBack"), for: .normal)
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+    /// 返回按钮
+    private lazy var backBtn: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        let color: UIColor
+        if #available(iOS 13.0, *) {
+            color = .zl.navTitleColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        } else {
+            color = .zl.navTitleColor
+        }
+        let imageName: String = navigationController?.viewControllers.count == 1 ? "zl_close" : "zl_navBack"
+        btn.setImage(.zl.getImage(imageName)?.zl.resize(to: .init(width: 20.0, height: 20.0)).zl.withTint(color: color), for: .normal)
+        btn.enlargeInsets = .init(top: 0.0, left: 16.0, bottom: 0.0, right: 10.0)
+        // btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
     }()
     
+    /// 选择按钮
     private lazy var selectBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_btn_circle"), for: .normal)
-        btn.setImage(.zl.getImage("zl_btn_selected"), for: .selected)
+        let color: UIColor
+        if #available(iOS 13.0, *) {
+            color = .zl.navTitleColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        } else {
+            color = .zl.navTitleColor
+        }
+        btn.setImage(.zl.getImage("zl_btn_circle")?.zl.resize(to: .init(width: 22.0, height: 22.0)).zl.withTint(color: color), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 22.0, height: 22.0)), for: .selected)
         btn.enlargeInset = 10
         btn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
         return btn
@@ -130,11 +146,64 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var doneBtn: UIButton = {
         let btn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
-        btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColorOfPreviewVC
+        if #available(iOS 13.0, *) {
+            btn.backgroundColor = .zl.bottomToolViewBtnDisableBgColorOfPreviewVC.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        } else {
+            btn.backgroundColor = .zl.bottomToolViewBtnDisableBgColorOfPreviewVC
+        }
         btn.layer.masksToBounds = true
         btn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
+        btn.isEnabled = (navigationController as? ZLImageNavController)?.arrSelectedModels.isEmpty == false
         return btn
     }()
+    
+    /// 压缩
+    private lazy var compressBtn: UIButton = {
+        let _color: UIColor
+        if #available(iOS 13.0, *) {
+            _color = .zl.bottomToolPlaceholderColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        } else {
+            _color = .zl.bottomToolPlaceholderColor
+        }
+        let _btn: UIButton = .init(type: .custom)
+        _btn.titleLabel?.lineBreakMode = .byCharWrapping
+        _btn.titleLabel?.numberOfLines = 1
+        _btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
+        _btn.contentHorizontalAlignment = .left
+        _btn.setImage(.zl.getImage("zl_btn_unselected")?.zl.resize(to: .init(width: 18.0, height: 18.0)).zl.withTint(color: _color), for: .normal)
+        _btn.setImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 18.0, height: 18.0)), for: .selected)
+        _btn.setImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 18.0, height: 18.0)), for: [.selected, .highlighted])
+        _btn.setTitle("压缩", for: .normal)
+        _btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5.0, bottom: 0, right: -5.0)
+        _btn.setTitleColor(_color, for: .normal)
+        _btn.isHidden = ZLPhotoConfiguration.default().allowSelectOriginal == true
+        || ZLPhotoConfiguration.default().allowCompressImage == false
+        || (navigationController as? ZLImageNavController)?.arrSelectedModels.isEmpty == true
+        _btn.sizeToFit()
+        _btn.isSelected = ((navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false) == false
+        _btn.addTarget(self, action: #selector(compressActionHandler(_:)), for: .touchUpInside)
+        return _btn
+    }()
+    
+    /// UILabel
+    private lazy var bytesLabel: UILabel = {
+        let _color: UIColor
+        if #available(iOS 13.0, *) {
+            _color = .zl.bottomToolPlaceholderColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        } else {
+            _color = .zl.bottomToolPlaceholderColor
+        }
+        let _label: UILabel = .init(frame: .zero)
+        _label.font = ZLLayout.bottomToolTitleFont
+        _label.textColor = _color
+        _label.textAlignment = .center
+        _label.adjustsFontSizeToFitWidth = true
+        _label.isHidden = ZLPhotoConfiguration.default().allowSelectOriginal == true
+        || ZLPhotoConfiguration.default().allowBytes == false
+        || (navigationController as? ZLImageNavController)?.arrSelectedModels.isEmpty == true
+        return _label
+    }()
+    
     
     private var selPhotoPreview: ZLPhotoPreviewSelectedView?
     
@@ -189,6 +258,8 @@ class ZLPhotoPreviewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        // refreshBottomViewUIs
+        refreshBottomViewUIs()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -221,7 +292,7 @@ class ZLPhotoPreviewController: UIViewController {
         navView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: navH)
         navBlurView?.frame = navView.bounds
         
-        backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
+        backBtn.frame = CGRect(x: 16.0, y: insets.top, width: 20.0, height: 44)
         selectBtn.frame = CGRect(x: view.frame.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
         indexLabel.frame = selectBtn.bounds
         
@@ -251,6 +322,47 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
+    /// refreshBottomViewUIs
+    private func refreshBottomViewUIs() {
+        guard let navi = navigationController as? ZLImageNavController else { return }
+        // 展示或隐藏压缩按钮
+        compressBtn.isHidden = navi.arrSelectedModels.isEmpty == true || ZLPhotoConfiguration.default().allowCompressImage == false
+        compressBtn.isSelected = navi.isSelectedOriginal == false
+        // 更新 完成按钮
+        if navi.arrSelectedModels.isEmpty == false {
+            doneBtn.isEnabled = true
+            if #available(iOS 13.0, *) {
+                doneBtn.backgroundColor = .zl.bottomToolViewBtnNormalBgColorOfPreviewVC.resolvedColor(with: .init(userInterfaceStyle: .dark))
+            } else {
+                doneBtn.backgroundColor = .zl.bottomToolViewBtnNormalBgColorOfPreviewVC
+            }
+            
+        } else {
+            doneBtn.isEnabled = false
+            if #available(iOS 13.0, *) {
+                doneBtn.backgroundColor = .zl.bottomToolViewBtnDisableBgColorOfPreviewVC.resolvedColor(with: .init(userInterfaceStyle: .dark))
+            } else {
+                doneBtn.backgroundColor = .zl.bottomToolViewBtnDisableBgColorOfPreviewVC
+            }
+        }
+        // 展示或隐藏资源大小
+        bytesLabel.isHidden = navi.arrSelectedModels.isEmpty == true || ZLPhotoConfiguration.default().allowBytes == false
+        // 更新资源大小
+        if navi.arrSelectedModels.isEmpty == true {
+            bytesLabel.text = nil
+        } else {
+            let totalUnitCount: Int
+            if navi.isSelectedOriginal == true {
+                totalUnitCount = navi.arrSelectedModels.reduce(0, { $0 + $1.asset.zl.fileSize })
+            } else {
+                totalUnitCount = navi.arrSelectedModels.reduce(0, { $0 + $1.compressBytes })
+            }
+            let bytes: String = ByteCountFormatter.string(fromByteCount: Int64(totalUnitCount), countStyle: .file).replacingOccurrences(of: " ", with: "")
+            bytesLabel.text = "已选择\(navi.arrSelectedModels.count)个文件(\(bytes))"
+        }
+    }
+    
+    /// refreshBottomViewFrame
     private func refreshBottomViewFrame() {
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, *) {
@@ -296,6 +408,13 @@ class ZLPhotoPreviewController: UIViewController {
         }
         let doneBtnW = doneTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: btnH)
+        
+        compressBtn.frame = .init(x: 16.0, y: 0.0, width: compressBtn.bounds.width, height: btnH)
+        compressBtn.center.y = doneBtn.center.y
+        
+        bytesLabel.frame = .init(x: 0.0, y: 0.0, width: bottomView.bounds.width * 0.5, height: btnH)
+        bytesLabel.center.x = bottomView.bounds.width * 0.5
+        bytesLabel.center.y = doneBtn.center.y
     }
     
     private func setupUI() {
@@ -340,6 +459,9 @@ class ZLPhotoPreviewController: UIViewController {
         originalBtn.isHidden = !(config.allowSelectOriginal && config.allowSelectImage)
         originalBtn.isSelected = (navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false
         bottomView.addSubview(originalBtn)
+        
+        bottomView.addSubview(compressBtn)
+        bottomView.addSubview(bytesLabel)
         
         bottomView.addSubview(doneBtn)
         
@@ -518,6 +640,8 @@ class ZLPhotoPreviewController: UIViewController {
             selPhotoPreview?.addSelModel(model: currentModel)
         }
         resetSubViewStatus()
+        // 更新UI
+        refreshBottomViewUIs()
     }
     
     @objc private func editBtnClick() {
@@ -596,10 +720,10 @@ class ZLPhotoPreviewController: UIViewController {
         func callBackBeforeDone() {
             if let block = ZLPhotoConfiguration.default().operateBeforeDoneAction {
                 block(self) { [weak nav] in
-                    nav?.selectImageBlock?()
+                    nav?.selectImageBlock?(.darkBlur)
                 }
             } else {
-                nav.selectImageBlock?()
+                nav.selectImageBlock?(.darkBlur)
             }
         }
         
@@ -615,6 +739,21 @@ class ZLPhotoPreviewController: UIViewController {
         } else {
             callBackBeforeDone()
         }
+    }
+    
+    /// compressActionHandler
+    /// - Parameter sender: UIButton
+    @objc private func compressActionHandler(_ sender: UIButton) {
+        guard let navi = navigationController as? ZLImageNavController else { return }
+        sender.imageView?.layer.removeAllAnimations()
+        if sender.isSelected == false, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect == true {
+            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
+        }
+        // 更新状态
+        sender.isSelected.toggle()
+        navi.isSelectedOriginal = sender.isSelected == false
+        // 更新Ui
+        refreshBottomViewUIs()
     }
     
     private func scrollToSelPreviewCell(_ model: ZLPhotoModel) {
@@ -683,7 +822,7 @@ class ZLPhotoPreviewController: UIViewController {
                         let m = ZLPhotoModel(asset: asset!)
                         nav?.arrSelectedModels.removeAll()
                         nav?.arrSelectedModels.append(m)
-                        nav?.selectImageBlock?()
+                        nav?.selectImageBlock?(.darkBlur)
                     } else {
                         showAlertView(localLanguageTextValue(.saveVideoError), self)
                     }
@@ -691,7 +830,7 @@ class ZLPhotoPreviewController: UIViewController {
             } else {
                 nav?.arrSelectedModels.removeAll()
                 nav?.arrSelectedModels.append(model)
-                nav?.selectImageBlock?()
+                nav?.selectImageBlock?(.darkBlur)
             }
         }
         
@@ -799,13 +938,13 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
             baseCell = cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLPhotoPreviewCell.zl.identifier, for: indexPath) as! ZLPhotoPreviewCell
-
+            
             cell.singleTapBlock = { [weak self] in
                 self?.tapPreviewCell()
             }
-
+            
             cell.model = model
-
+            
             baseCell = cell
         }
         
@@ -1019,9 +1158,12 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
         
         let m = arrSelectedModels[indexPath.row]
         cell.model = m
-        
+        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0.0 {
+            cell.layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
+            cell.layer.masksToBounds = true
+        }
         if m == currentShowModel {
-            cell.layer.borderWidth = 4
+            cell.layer.borderWidth = 3.0
         } else {
             cell.layer.borderWidth = 0
         }
@@ -1080,8 +1222,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        layer.borderColor = UIColor.zl.bottomToolViewBtnNormalBgColorOfPreviewVC.cgColor
+        layer.borderColor = UIColor.zl.themeColor.cgColor
         
         contentView.addSubview(imageView)
         contentView.addSubview(tagImageView)
@@ -1091,6 +1232,13 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// traitCollectionDidChange
+    /// - Parameter previousTraitCollection: UITraitCollection
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        layer.borderColor = UIColor.zl.themeColor.cgColor
     }
     
     override func layoutSubviews() {

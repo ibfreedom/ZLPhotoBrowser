@@ -43,4 +43,5 @@ extension ZLPhotoBrowserWrapper where Base: PHAsset {
         guard let fileSize = resource?.value(forKey: "fileSize") as? CLong else { return 0 }
         return fileSize
     }
+    
 }

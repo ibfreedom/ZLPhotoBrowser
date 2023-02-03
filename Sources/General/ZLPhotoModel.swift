@@ -45,6 +45,7 @@ public class ZLPhotoModel: NSObject {
     
     public let asset: PHAsset
     
+    
     public var type: ZLPhotoModel.MediaType = .unknown
     
     public var duration: String = ""
@@ -151,4 +152,16 @@ public extension ZLPhotoModel {
         return lhs.ident == rhs.ident
     }
     
+}
+
+extension ZLPhotoModel {
+    
+    /// Int
+    internal var compressBytes: Int {
+        if type != .image || asset.zl.fileSize < ZLPhotoConfiguration.default().compressBytes {
+            return asset.zl.fileSize
+        } else {
+            return ZLPhotoConfiguration.default().compressBytes
+        }
+    }
 }

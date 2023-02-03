@@ -129,7 +129,7 @@ public class ZLImagePreviewController: UIViewController {
         btn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         return btn
     }()
-    
+
     private var isFirstAppear = true
     
     private var hideNavView = false

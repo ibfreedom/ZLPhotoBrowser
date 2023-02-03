@@ -478,7 +478,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
             return
         }
-        requestSelectPhoto()
+        requestSelectPhoto(hudStyle: nil)
     }
     
     @objc private func panSelectAction(_ pan: UIPanGestureRecognizer) {
@@ -525,7 +525,7 @@ public class ZLPhotoPreviewSheet: UIView {
             if pvRect.midY < -10 {
                 arrSelectedModels.removeAll()
                 arrSelectedModels.append(panModel!)
-                requestSelectPhoto()
+                requestSelectPhoto(hudStyle: nil)
                 callBack = true
             }
             
@@ -549,7 +549,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-    private func requestSelectPhoto(viewController: UIViewController? = nil) {
+    private func requestSelectPhoto(viewController: UIViewController? = nil, hudStyle: ZLProgressHUD.HUDStyle?) {
         guard !arrSelectedModels.isEmpty else {
             selectImageBlock?([], isSelectOriginal)
             hide()
@@ -571,7 +571,8 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        let hudStyle: ZLProgressHUD.HUDStyle = hudStyle ?? ZLPhotoUIConfiguration.default().hudStyle
+        let hud = ZLProgressHUD(style: hudStyle)
         
         var timeout = false
         hud.timeoutBlock = { [weak self] in
@@ -700,7 +701,7 @@ public class ZLPhotoPreviewSheet: UIView {
                         model.editImage = ei
                         model.editImageModel = editImageModel
                         self?.arrSelectedModels.append(model)
-                        self?.requestSelectPhoto()
+                        self?.requestSelectPhoto(hudStyle: nil)
                     }
                 } else {
                     showAlertView(localLanguageTextValue(.imageLoadFailed), self?.sender)
@@ -733,7 +734,7 @@ public class ZLPhotoPreviewSheet: UIView {
                             m.isSelected = true
                             self?.arrSelectedModels.removeAll()
                             self?.arrSelectedModels.append(m)
-                            self?.requestSelectPhoto()
+                            self?.requestSelectPhoto(hudStyle: nil)
                         } else {
                             showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
                         }
@@ -741,7 +742,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 } else {
                     self?.arrSelectedModels.removeAll()
                     self?.arrSelectedModels.append(model)
-                    self?.requestSelectPhoto()
+                    self?.requestSelectPhoto(hudStyle: nil)
                 }
             }
             vc.modalPresentationStyle = .fullScreen
@@ -762,11 +763,11 @@ public class ZLPhotoPreviewSheet: UIView {
     private func getImageNav(rootViewController: UIViewController) -> ZLImageNavController {
         let nav = ZLImageNavController(rootViewController: rootViewController)
         nav.modalPresentationStyle = .fullScreen
-        nav.selectImageBlock = { [weak self, weak nav] in
+        nav.selectImageBlock = { [weak self, weak nav] hudStyle in
             self?.isSelectOriginal = nav?.isSelectedOriginal ?? false
             self?.arrSelectedModels.removeAll()
             self?.arrSelectedModels.append(contentsOf: nav?.arrSelectedModels ?? [])
-            self?.requestSelectPhoto(viewController: nav)
+            self?.requestSelectPhoto(viewController: nav, hudStyle: hudStyle)
         }
         
         nav.cancelBlock = { [weak self] in
@@ -822,7 +823,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 arrSelectedModels.append(newModel)
                 
                 if ZLPhotoConfiguration.default().callbackDirectlyAfterTakingPhoto {
-                    requestSelectPhoto()
+                    requestSelectPhoto(hudStyle: nil)
                 }
             }
         }

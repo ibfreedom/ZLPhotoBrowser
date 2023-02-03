@@ -76,6 +76,12 @@ extension MHPickerViewController {
         ZLPhotoUIConfiguration.default().bottomToolPlaceholderColor = .secondary
         ZLPhotoUIConfiguration.default().bottomToolViewBtnNormalBgColor = .major
         ZLPhotoUIConfiguration.default().bottomToolViewBtnDisableBgColor = .light
+        
+        ZLPhotoUIConfiguration.default().navViewBlurEffectOfPreview = .init(style: .dark)
+        ZLPhotoUIConfiguration.default().navBarColorOfPreviewVC = .clear
+        ZLPhotoUIConfiguration.default().bottomViewBlurEffectOfPreview = .init(style: .dark)
+        ZLPhotoUIConfiguration.default().bottomToolViewBgColorOfPreviewVC = .clear
+        
         if #available(iOS 13.0, *) {
             ZLPhotoUIConfiguration.default().hudStyle = UITraitCollection.current.userInterfaceStyle == .dark ? .darkBlur : .lightBlur
         } else {
