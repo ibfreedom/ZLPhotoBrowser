@@ -61,12 +61,12 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Adjust Slider Type
     @objc public var adjustSliderType: ZLAdjustSliderType = .vertical
     
-    @objc public var cellCornerRadio: CGFloat = 0
+    @objc public var cellCornerRadio: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 8.0 : 5.0
     
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?
     
-    private var pri_columnCount: Int = 5
+    private var pri_columnCount: Int = UIDevice.current.userInterfaceIdiom == .pad ? 6 : 5
     /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```
     /// iPhone landscape mode: columnCount += 2.
@@ -107,6 +107,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The blur effect of the bottom tool bar in the preview interface
     @objc public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+
     
     // MARK: Image properties
     
@@ -187,6 +188,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// The theme color of framework.
     /// 框架主题色
     @objc public var themeColor: UIColor = .zl.rgba(38, 191, 76)
+    /// placeholderColor
+    @objc public var placeholderColor: UIColor = .lightText
+    /// border color
+    @objc public var borderColor: UIColor = .lightGray
     
     /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色
@@ -223,6 +228,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// A color for Navigation bar text.
     /// 相册列表及小图界面导航栏标题颜色
     @objc public var navTitleColor: UIColor = .white
+    /// UIColor
+    @objc public var navArrowColor: UIColor = .gray
+    
+    @objc public var navTitleBorderColor: UIColor = .gray
     
     /// A color for Navigation bar text of preview vc.
     /// 预览大图界面导航栏标题颜色
@@ -251,6 +260,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// A color for album list separator.
     /// 相册列表分割线颜色
     @objc public var separatorColor: UIColor = .zl.rgba(60, 60, 60)
+    
+    /// shadow color
+    @objc public var shadowColor: UIColor = .gray
     
     /// A color for background in thumbnail interface.
     /// 相册小图界面背景色

@@ -213,9 +213,11 @@ extension ZLEmbedAlbumListView: UITableViewDataSource, UITableViewDelegate {
         
         let m = arrDataSource[indexPath.row]
         
+        cell.checkmark = m == selectedAlbum
         cell.configureCell(model: m, style: .embedAlbumList)
         
-        cell.selectBtn.isSelected = m == selectedAlbum
+        // cell.selectBtn.isSelected = m == selectedAlbum
+        
         
         return cell
     }

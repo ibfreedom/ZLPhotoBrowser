@@ -112,7 +112,7 @@ extension KingfisherManager {
 extension ImageDownloader {
     @available(*, deprecated, message: "Use `Result` based callback instead.")
     @discardableResult
-    open func downloadImage(with url: URL,
+    public func downloadImage(with url: URL,
                             retrieveImageTask: RetrieveImageTask? = nil,
                             options: KingfisherOptionsInfo? = nil,
                             progressBlock: ImageDownloaderProgressBlock? = nil,
@@ -313,7 +313,7 @@ extension ImageCache {
     /// memory warning notification is received.
     @available(*, deprecated, message: "Use `memoryStorage.config.totalCostLimit` instead.",
     renamed: "memoryStorage.config.totalCostLimit")
-    open var maxMemoryCost: Int {
+    public var maxMemoryCost: Int {
         get { return memoryStorage.config.totalCostLimit }
         set { memoryStorage.config.totalCostLimit = newValue }
     }
@@ -328,7 +328,7 @@ extension ImageCache {
     /// The default file extension appended to cached files.
     @available(*, deprecated, message: "Use `diskStorage.config.pathExtension` instead.",
     renamed: "diskStorage.config.pathExtension")
-    open var pathExtension: String? {
+    public var pathExtension: String? {
         get { return diskStorage.config.pathExtension }
         set { diskStorage.config.pathExtension = newValue }
     }
@@ -345,14 +345,14 @@ extension ImageCache {
     /// Default is no limit.
     @available(*, deprecated, message: "Use `diskStorage.config.sizeLimit` instead.",
     renamed: "diskStorage.config.sizeLimit")
-    open var maxDiskCacheSize: UInt {
+    public var maxDiskCacheSize: UInt {
         get { return UInt(diskStorage.config.sizeLimit) }
         set { diskStorage.config.sizeLimit = newValue }
     }
     
     @available(*, deprecated, message: "Use `diskStorage.cacheFileURL(forKey:).path` instead.",
     renamed: "diskStorage.cacheFileURL(forKey:)")
-    open func cachePath(forComputedKey key: String) -> String {
+    public func cachePath(forComputedKey key: String) -> String {
         return diskStorage.cacheFileURL(forKey: key).path
     }
     
@@ -368,7 +368,7 @@ extension ImageCache {
     @available(*, deprecated,
     message: "Use `Result` based `retrieveImageInDiskCache(forKey:options:callbackQueue:completionHandler:)` instead.",
     renamed: "retrieveImageInDiskCache(forKey:options:callbackQueue:completionHandler:)")
-    open func retrieveImageInDiskCache(forKey key: String, options: KingfisherOptionsInfo? = nil) -> KFCrossPlatformImage? {
+    public func retrieveImageInDiskCache(forKey key: String, options: KingfisherOptionsInfo? = nil) -> KFCrossPlatformImage? {
         let options = KingfisherParsedOptionsInfo(options ?? .empty)
         let computedKey = key.computedKey(with: options.processor.identifier)
         do {
@@ -382,7 +382,7 @@ extension ImageCache {
     @available(*, deprecated,
     message: "Use `Result` based `retrieveImage(forKey:options:callbackQueue:completionHandler:)` instead.",
     renamed: "retrieveImage(forKey:options:callbackQueue:completionHandler:)")
-    open func retrieveImage(forKey key: String,
+    public func retrieveImage(forKey key: String,
                             options: KingfisherOptionsInfo?,
                             completionHandler: ((KFCrossPlatformImage?, CacheType) -> Void)?)
     {
@@ -405,13 +405,13 @@ extension ImageCache {
     /// Default is 1 week (60 * 60 * 24 * 7 seconds).
     /// Setting this to a negative value will make the disk cache never expiring.
     @available(*, deprecated, message: "Deprecated. Use `diskStorage.config.expiration` instead")
-    open var maxCachePeriodInSecond: TimeInterval {
+    public var maxCachePeriodInSecond: TimeInterval {
         get { return diskStorage.config.expiration.timeInterval }
         set { diskStorage.config.expiration = newValue < 0 ? .never : .seconds(newValue) }
     }
 
     @available(*, deprecated, message: "Use `Result` based callback instead.")
-    open func store(_ image: KFCrossPlatformImage,
+    public func store(_ image: KFCrossPlatformImage,
                     original: Data? = nil,
                     forKey key: String,
                     processorIdentifier identifier: String = "",
@@ -433,7 +433,7 @@ extension ImageCache {
     }
 
     @available(*, deprecated, message: "Use the `Result`-based `calculateDiskStorageSize` instead.")
-    open func calculateDiskCacheSize(completion handler: @escaping ((_ size: UInt) -> Void)) {
+    public func calculateDiskCacheSize(completion handler: @escaping ((_ size: UInt) -> Void)) {
         calculateDiskStorageSize { result in
             let size: UInt? = try? result.get()
             handler(size ?? 0)

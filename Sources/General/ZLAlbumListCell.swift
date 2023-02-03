@@ -35,13 +35,15 @@ class ZLAlbumListCell: UITableViewCell {
         if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
             view.layer.masksToBounds = true
             view.layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
+            view.layer.borderWidth = 0.5
+            view.layer.borderColor = UIColor.zl.borderColor.cgColor
         }
         return view
     }()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .zl.font(ofSize: 17)
+        label.font = .zl.font(ofSize: 16)
         label.textColor = .zl.albumListTitleColor
         label.lineBreakMode = .byTruncatingTail
         return label
@@ -49,7 +51,7 @@ class ZLAlbumListCell: UITableViewCell {
     
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = .zl.font(ofSize: 16)
+        label.font = .zl.font(ofSize: 13)
         label.textColor = .zl.albumListCountColor
         return label
     }()
@@ -60,13 +62,8 @@ class ZLAlbumListCell: UITableViewCell {
     
     private var style: ZLPhotoBrowserStyle = .embedAlbumList
     
-    lazy var selectBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.isUserInteractionEnabled = false
-        btn.isHidden = true
-        btn.setImage(.zl.getImage("zl_albumSelect"), for: .selected)
-        return btn
-    }()
+    /// checkmark
+    internal var checkmark: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -83,6 +80,15 @@ class ZLAlbumListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// traitCollectionDidChange
+    /// - Parameter previousTraitCollection: UITraitCollection
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
+            coverImageView.layer.borderColor = UIColor.zl.borderColor.cgColor
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -93,7 +99,8 @@ class ZLAlbumListCell: UITableViewCell {
             imageViewX = 12
         }
         
-        coverImageView.frame = CGRect(x: imageViewX, y: 2, width: bounds.height - 4, height: bounds.height - 4)
+        coverImageView.frame = CGRect(x: imageViewX, y: 0.0, width: bounds.height * 0.9, height: bounds.height * 0.9)
+        coverImageView.center.y = contentView.center.y
         if let m = model {
             let titleW = min(
                 bounds.width / 3 * 2,
@@ -109,9 +116,8 @@ class ZLAlbumListCell: UITableViewCell {
                     font: .zl.font(ofSize: 16),
                     limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
                 )
-            countLabel.frame = CGRect(x: titleLabel.frame.maxX + 10, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
+            countLabel.frame = CGRect(x: titleLabel.frame.maxX, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
         }
-        selectBtn.frame = CGRect(x: bounds.width - 20 - 20, y: (bounds.height - 20) / 2, width: 20, height: 20)
     }
     
     func setupUI() {
@@ -121,7 +127,6 @@ class ZLAlbumListCell: UITableViewCell {
         contentView.addSubview(coverImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(countLabel)
-        contentView.addSubview(selectBtn)
     }
     
     func configureCell(model: ZLAlbumListModel, style: ZLPhotoBrowserStyle) {
@@ -132,11 +137,10 @@ class ZLAlbumListCell: UITableViewCell {
         countLabel.text = "(" + String(self.model.count) + ")"
         
         if style == .embedAlbumList {
-            accessoryType = .none
-            selectBtn.isHidden = false
+            accessoryType = checkmark == true ? .checkmark : .none
+            tintColor = .zl.themeColor
         } else {
             accessoryType = .disclosureIndicator
-            selectBtn.isHidden = true
         }
         
         imageIdentifier = self.model.headImageAsset?.localIdentifier

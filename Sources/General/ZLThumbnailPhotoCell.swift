@@ -39,7 +39,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     private lazy var descLabel: UILabel = {
         let label = UILabel()
-        label.font = .zl.font(ofSize: 13)
+        label.font = .zl.font(ofSize: 12)
         label.textAlignment = .right
         label.textColor = .white
         return label
@@ -66,8 +66,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     lazy var btnSelect: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setBackgroundImage(.zl.getImage("zl_btn_unselected"), for: .normal)
-        btn.setBackgroundImage(.zl.getImage("zl_btn_selected"), for: .selected)
+        btn.setBackgroundImage(.zl.getImage("zl_btn_unselected")?.zl.resize(to: .init(width: 18.0, height: 18.0)).zl.withTint(color: .white), for: .normal)
+        btn.setBackgroundImage(.zl.getImage("zl_btn_selected")?.zl.resize(to: .init(width: 18.0, height: 18.0)), for: .selected)
         btn.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
         btn.enlargeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 10, right: 5)
         return btn
@@ -123,7 +123,17 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// traitCollectionDidChange
+    /// - Parameter previousTraitCollection: UITraitCollection
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // layer.borderColor
+        layer.borderColor = UIColor.zl.borderColor.cgColor
+    }
+    
     func setupUI() {
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.zl.borderColor.cgColor
         contentView.addSubview(imageView)
         contentView.addSubview(coverView)
         contentView.addSubview(btnSelect)
@@ -143,13 +153,14 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     override func layoutSubviews() {
         imageView.frame = bounds
         coverView.frame = bounds
-        btnSelect.frame = CGRect(x: bounds.width - 30, y: 8, width: 23, height: 23)
+        btnSelect.frame = CGRect(x: bounds.width - 18.0 - 5.0, y: 5.0, width: 18.0, height: 18.0)
         indexLabel.frame = btnSelect.bounds
-        bottomShadowView.frame = CGRect(x: 0, y: bounds.height - 25, width: bounds.width, height: 25)
-        videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
-        livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
+        indexLabel.layer.cornerRadius = btnSelect.bounds.width * 0.5
+        bottomShadowView.frame = CGRect(x: 0.0, y: bounds.height - 20.0, width: bounds.width, height: 20.0)
+        videoTag.frame = CGRect(x: 5, y: (bottomShadowView.bounds.height - 12.0) * 0.5, width: 18.0, height: 12.0)
+        livePhotoTag.frame = CGRect(x: 5, y: (bottomShadowView.bounds.height - 18.0) * 0.5, width: 18.0, height: 18.0)
         editImageTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
-        descLabel.frame = CGRect(x: 30, y: 1, width: bounds.width - 35, height: 17)
+        descLabel.frame = CGRect(x: 30, y: (bottomShadowView.bounds.height - 17.0) * 0.5, width: bounds.width - 35, height: 17)
         progressView.frame = CGRect(x: (bounds.width - 20) / 2, y: (bounds.height - 20) / 2, width: 20, height: 20)
         
         super.layoutSubviews()

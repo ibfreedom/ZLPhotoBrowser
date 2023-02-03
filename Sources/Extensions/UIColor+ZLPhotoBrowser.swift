@@ -27,6 +27,21 @@
 import UIKit
 
 extension ZLPhotoBrowserWrapper where Base: UIColor {
+    
+    /// themeColor
+    static var themeColor: UIColor {
+        ZLPhotoUIConfiguration.default().themeColor
+    }
+    
+    static var placeholderColor: UIColor {
+        ZLPhotoUIConfiguration.default().placeholderColor
+    }
+    
+    /// UIColor
+    static var borderColor: UIColor {
+        ZLPhotoUIConfiguration.default().borderColor
+    }
+    
     static var navBarColor: UIColor {
         ZLPhotoUIConfiguration.default().navBarColor
     }
@@ -38,6 +53,14 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
     /// 相册列表界面导航标题颜色
     static var navTitleColor: UIColor {
         ZLPhotoUIConfiguration.default().navTitleColor
+    }
+    
+    static var navArrowColor: UIColor {
+        ZLPhotoUIConfiguration.default().navArrowColor
+    }
+    
+    static var navTitleBorderColor: UIColor {
+        ZLPhotoUIConfiguration.default().navTitleBorderColor
     }
     
     /// 预览大图界面导航标题颜色
@@ -93,6 +116,11 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
     /// 分割线颜色
     static var separatorLineColor: UIColor {
         ZLPhotoUIConfiguration.default().separatorColor
+    }
+    
+    /// UIColor
+    static var shadowColor: UIColor {
+        ZLPhotoUIConfiguration.default().shadowColor
     }
     
     /// 小图界面背景色

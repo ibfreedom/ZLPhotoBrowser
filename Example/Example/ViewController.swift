@@ -151,6 +151,19 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
+        let controller: MHPickerViewController = .init(options: .default) { evt in
+            switch evt {
+            case .success((let elements, let isOriginal)):
+                print(elements.count, isOriginal)
+            case .failure(let error):
+                print(error)
+            }
+        }
+        controller.show(onTarget: self)
+        
+        return
+        
+        
         let minItemSpacing: CGFloat = 2
         let minLineSpacing: CGFloat = 2
         
@@ -162,7 +175,7 @@ class ViewController: UIViewController {
 //            .indexLabelTextColor(.white)
             .minimumInteritemSpacing(minItemSpacing)
             .minimumLineSpacing(minLineSpacing)
-            .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
+            
         
         // Custom image editor
         ZLPhotoConfiguration.default()

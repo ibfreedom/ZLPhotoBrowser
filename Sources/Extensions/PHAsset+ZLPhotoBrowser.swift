@@ -37,4 +37,10 @@ extension ZLPhotoBrowserWrapper where Base: PHAsset {
     var resource: PHAssetResource? {
         return PHAssetResource.assetResources(for: base).first
     }
+    
+    /// Int
+    var fileSize: Int {
+        guard let fileSize = resource?.value(forKey: "fileSize") as? CLong else { return 0 }
+        return fileSize
+    }
 }

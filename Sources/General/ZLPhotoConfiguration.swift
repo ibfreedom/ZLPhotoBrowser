@@ -44,8 +44,8 @@ public class ZLPhotoConfiguration: NSObject {
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     @objc public var sortAscending = true
     
-    private var pri_maxSelectCount = 9
-    /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
+    private var pri_maxSelectCount = 20
+    /// Anything superior than 1 will enable the multiple selection feature. Defaults to 20.
     @objc public var maxSelectCount: Int {
         get {
             return pri_maxSelectCount
@@ -118,7 +118,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Whether to callback directly after taking a photo. Defaults to false.
     @objc public var callbackDirectlyAfterTakingPhoto = false
     
-    var pri_allowEditImage = true
+    var pri_allowEditImage = false
     @objc public var allowEditImage: Bool {
         get {
             return pri_allowEditImage
@@ -173,7 +173,13 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var allowDragSelect = false
     
     /// Allow select full image. Defaults to true.
-    @objc public var allowSelectOriginal = true
+    @objc public var allowSelectOriginal = false
+    /// allowCompressImage
+    @objc public var allowCompressImage: Bool = true
+    /// allowBytes
+    @objc public var allowBytes: Bool = true
+    /// compressBytes
+    @objc public var compressBytes: Int = 150 * 1024
     
     /// Always return the original photo.
     /// - warning: Only valid when `allowSelectOriginal = false`, Defaults to false.
@@ -192,7 +198,7 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var maxEditVideoTime: Second = 10
     
     /// Allow to choose the maximum duration of the video. Defaults to 120.
-    @objc public var maxSelectVideoDuration: Second = 120
+    @objc public var maxSelectVideoDuration: Second = .max
     
     /// Allow to choose the minimum duration of the video. Defaults to 0.
     @objc public var minSelectVideoDuration: Second = 0

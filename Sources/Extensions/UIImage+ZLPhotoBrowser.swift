@@ -489,6 +489,17 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         return tintedImage
 
     }
+    
+    /// tint color
+    /// - Parameter color: UIColor
+    /// - Returns: UIImage
+    internal func withTint(color: UIColor) -> UIImage {
+        if #available(iOS 13.0, *) {
+            return base.withTintColor(color, renderingMode: .alwaysOriginal)
+        } else {
+            return base.zl.fillColor(color) ?? base
+        }
+    }
 }
 
 public extension ZLPhotoBrowserWrapper where Base: UIImage {
@@ -511,6 +522,22 @@ extension ZLPhotoBrowserWrapper where Base: UIImage {
         }
         return UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
     }
+    
+    /// resize to new size
+    /// - Parameter size: CGSize
+    /// - Returns: UIImage
+    internal func resize(to size: CGSize) -> UIImage {
+        let render: UIGraphicsImageRenderer
+        if #available(iOS 11.0, *) {
+            render = .init(size: size, format: .preferred())
+        } else {
+            render = .init(size: size, format: .default())
+        }
+        return render.image { context in
+            base.draw(in: .init(x: 0.0, y: 0.0, width: size.width, height: size.height))
+        }
+    }
+    
 }
 
 public extension ZLPhotoBrowserWrapper where Base: CIImage {

@@ -33,45 +33,38 @@ public class ZLProgressHUD: UIView {
         case dark
         case darkBlur
         
+        /// UIColor
         var bgColor: UIColor {
             switch self {
-            case .light:
-                return .white
-            case .dark:
-                return .darkGray
-            case .lightBlur:
-                return UIColor.white.withAlphaComponent(0.8)
-            case .darkBlur:
-                return UIColor.darkGray.withAlphaComponent(0.8)
+            case .light:        return .white
+            case .dark:         return .darkGray
+            case .lightBlur:    return .clear
+            case .darkBlur:     return .clear
             }
         }
         
+        /// UIImage
         var icon: UIImage? {
             switch self {
-            case .light, .lightBlur:
-                return .zl.getImage("zl_loading_dark")
-            case .dark, .darkBlur:
-                return .zl.getImage("zl_loading_light")
+            case .light, .lightBlur:    return .zl.getImage("zl_loading_dark")?.zl.withTint(color: .zl.themeColor)
+            case .dark, .darkBlur:      return .zl.getImage("zl_loading_light")?.zl.withTint(color: .zl.themeColor)
             }
         }
         
+        /// UIColor
         var textColor: UIColor {
             switch self {
-            case .light, .lightBlur:
-                return .black
-            case .dark, .darkBlur:
-                return .white
+            case .light, .lightBlur:    return .darkText
+            case .dark, .darkBlur:      return .lightText
             }
         }
         
+        /// UIBlurEffect.Style
         var blurEffectStyle: UIBlurEffect.Style? {
             switch self {
-            case .light, .dark:
-                return nil
-            case .lightBlur:
-                return .extraLight
-            case .darkBlur:
-                return .dark
+            case .light, .dark: return nil
+            case .lightBlur:    return .extraLight
+            case .darkBlur:     return .dark
             }
         }
     }
@@ -101,7 +94,7 @@ public class ZLProgressHUD: UIView {
     }
     
     private func setupUI() {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: 135))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 100.0, height: 100.0))
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 12
         view.backgroundColor = style.bgColor
@@ -115,14 +108,20 @@ public class ZLProgressHUD: UIView {
             view.addSubview(effectView)
         }
         
-        loadingView.frame = CGRect(x: 135 / 2 - 20, y: 27, width: 40, height: 40)
+        loadingView.frame = CGRect(x: 0.0, y: 0.0, width: 30.0, height: 30.0)
+        loadingView.center.x = view.bounds.width * 0.5
+        loadingView.center.y = view.bounds.height * 0.5 - 12.0
         view.addSubview(loadingView)
         
-        let label = UILabel(frame: CGRect(x: 0, y: 85, width: view.bounds.width, height: 30))
+        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: view.bounds.width, height: 30.0))
+        label.center.x = view.bounds.width * 0.5
+        label.frame.origin.y = loadingView.frame.maxY + 8.0
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = style.textColor
-        label.font = .zl.font(ofSize: 16)
+        label.font = .systemFont(ofSize: 14.0, weight: .medium)
         label.text = localLanguageTextValue(.hudLoading)
+        
         view.addSubview(label)
         
         addSubview(view)
