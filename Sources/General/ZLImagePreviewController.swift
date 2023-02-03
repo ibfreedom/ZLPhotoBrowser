@@ -32,7 +32,7 @@ import Photos
     case video
 }
 
-public class ZLImagePreviewController: UIViewController {
+open class ZLImagePreviewController: UIViewController {
     
     static let colItemSpacing: CGFloat = 40
     
@@ -183,7 +183,7 @@ public class ZLImagePreviewController: UIViewController {
     }
     
     @available(*, unavailable)
-    required init?(coder _: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

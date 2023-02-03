@@ -159,6 +159,8 @@ class ViewController: UIViewController {
                 print(error)
             }
         }
+        controller.hue = .default()
+        controller.maxLimit = 9
         controller.show(onTarget: self)
         
         return

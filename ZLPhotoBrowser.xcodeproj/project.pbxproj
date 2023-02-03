@@ -53,6 +53,8 @@
 		E4D046F22500A361000BAEC2 /* ZLPhotoPreviewPopInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D046F12500A361000BAEC2 /* ZLPhotoPreviewPopInteractiveTransition.swift */; };
 		E4D06913254C06EB002278C4 /* ZLInputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D06912254C06EB002278C4 /* ZLInputTextViewController.swift */; };
 		E4D06916254C0F7F002278C4 /* ZLTextStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D06915254C0F7F002278C4 /* ZLTextStickerView.swift */; };
+		EDD3B5A0298CF233008F6DF1 /* MHPickerViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3B59E298CF233008F6DF1 /* MHPickerViewController+Extensions.swift */; };
+		EDD3B5A1298CF233008F6DF1 /* MHPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3B59F298CF233008F6DF1 /* MHPickerViewController.swift */; };
 		FD047622276B6C8500A93FA3 /* ZLEditToolCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD047621276B6C8500A93FA3 /* ZLEditToolCells.swift */; };
 		FD047624276C329800A93FA3 /* ZLEditImageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD047623276C329800A93FA3 /* ZLEditImageConfiguration.swift */; };
 		FD047629276C7C1C00A93FA3 /* ZLAdjustSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD047628276C7C1C00A93FA3 /* ZLAdjustSlider.swift */; };
@@ -120,6 +122,8 @@
 		E4D046F12500A361000BAEC2 /* ZLPhotoPreviewPopInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPreviewPopInteractiveTransition.swift; sourceTree = "<group>"; };
 		E4D06912254C06EB002278C4 /* ZLInputTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLInputTextViewController.swift; sourceTree = "<group>"; };
 		E4D06915254C0F7F002278C4 /* ZLTextStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLTextStickerView.swift; sourceTree = "<group>"; };
+		EDD3B59E298CF233008F6DF1 /* MHPickerViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MHPickerViewController+Extensions.swift"; sourceTree = "<group>"; };
+		EDD3B59F298CF233008F6DF1 /* MHPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MHPickerViewController.swift; sourceTree = "<group>"; };
 		FD047621276B6C8500A93FA3 /* ZLEditToolCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditToolCells.swift; sourceTree = "<group>"; };
 		FD047623276C329800A93FA3 /* ZLEditImageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditImageConfiguration.swift; sourceTree = "<group>"; };
 		FD047628276C7C1C00A93FA3 /* ZLAdjustSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLAdjustSlider.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 		E4C911C224E284B30061DA40 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				EDD3B59F298CF233008F6DF1 /* MHPickerViewController.swift */,
+				EDD3B59E298CF233008F6DF1 /* MHPickerViewController+Extensions.swift */,
 				E4C911C424E284B30061DA40 /* Info.plist */,
 				E4C911C324E284B30061DA40 /* ZLPhotoBrowser.h */,
 				E49BD1F824E3D332005D7DFB /* ZLPhotoBrowser.bundle */,
@@ -201,19 +207,19 @@
 		E4C911CC24E286B90061DA40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E49BD1FA24E3D515005D7DFB /* Bundle+ZLPhotoBrowser.swift */,
-				E492ABEA24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift */,
-				E462466124EBF06F00EF6C57 /* String+ZLPhotoBrowser.swift */,
-				E462466324EBF36F00EF6C57 /* UIColor+ZLPhotoBrowser.swift */,
-				E43EFA0B24F13747007067EC /* UIImage+ZLPhotoBrowser.swift */,
 				E45690B42530159800783AE6 /* Array+ZLPhotoBrowser.swift */,
 				2CC461C12551312C00BF96E8 /* Bool+ZLPhotoBrowser.swift */,
+				E49BD1FA24E3D515005D7DFB /* Bundle+ZLPhotoBrowser.swift */,
+				E492ABEA24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift */,
 				E4943ABA255A652A00C29B3A /* CGFloat+ZLPhotoBrowser.swift */,
-				E49FD9FD258A150600185885 /* PHAsset+ZLPhotoBrowser.swift */,
-				FD1C586A277AB8790037A746 /* UIViewController+ZLPhotoBrowser.swift */,
-				FDA54B8A2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift */,
 				FDE1DB75289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift */,
+				E49FD9FD258A150600185885 /* PHAsset+ZLPhotoBrowser.swift */,
+				E462466124EBF06F00EF6C57 /* String+ZLPhotoBrowser.swift */,
+				E462466324EBF36F00EF6C57 /* UIColor+ZLPhotoBrowser.swift */,
+				FDA54B8A2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift */,
+				E43EFA0B24F13747007067EC /* UIImage+ZLPhotoBrowser.swift */,
 				FD24655728E2A96200C15B20 /* UIView+ZLPhotoBrowser.swift */,
+				FD1C586A277AB8790037A746 /* UIViewController+ZLPhotoBrowser.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -363,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDD3B5A0298CF233008F6DF1 /* MHPickerViewController+Extensions.swift in Sources */,
 				E4A9CE012505DB91003201C1 /* ZLEmbedAlbumListView.swift in Sources */,
 				E48E52D52507297500619AED /* ZLClipImageDismissAnimatedTransition.swift in Sources */,
 				FD5230B5281562DD0034B782 /* ZLEnlargeButton.swift in Sources */,
@@ -409,6 +416,7 @@
 				FD74F6DD29345E4100B7916A /* ZLBaseStickerView.swift in Sources */,
 				E4D06913254C06EB002278C4 /* ZLInputTextViewController.swift in Sources */,
 				E492ABED24E5454E005E1BD5 /* ZLProgressView.swift in Sources */,
+				EDD3B5A1298CF233008F6DF1 /* MHPickerViewController.swift in Sources */,
 				E462466A24ED06C700EF6C57 /* ZLThumbnailViewController.swift in Sources */,
 				FD1C586B277AB8790037A746 /* UIViewController+ZLPhotoBrowser.swift in Sources */,
 				E4C911DA24E2A4910061DA40 /* ZLCustomCamera.swift in Sources */,
