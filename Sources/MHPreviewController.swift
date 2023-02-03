@@ -19,6 +19,8 @@ public class MHPreviewController: NSObject {
     public var maxLimit: Int = 20
     /// 配色方案
     public var hue: Hue = .default()
+    /// 是否压缩
+    public var compressed: Bool = true
     
     // MARK: 私有属性
     
@@ -91,6 +93,7 @@ extension MHPreviewController {
         ZLPhotoUIConfiguration.default().bottomViewBlurEffectOfPreview          = .init(style: .dark)
         ZLPhotoUIConfiguration.default().bottomToolViewBgColorOfPreviewVC       = .clear
         
+        
         if #available(iOS 13.0, *) {
             ZLPhotoUIConfiguration.default().hudStyle = UITraitCollection.current.userInterfaceStyle == .dark ? .darkBlur : .lightBlur
         } else {
@@ -131,7 +134,7 @@ extension MHPreviewController {
                                        userInfo: [NSLocalizedDescriptionKey: "媒体资源获取失败 \(assets)"])
             self.completionHandler(.failure(error))
         }
-        obj.previewAssets(sender: target, assets: elements, index: initailIndex, isOriginal: false, selectAll: false, showBottomViewAndSelectBtn: true)
+        obj.previewAssets(sender: target, assets: elements, index: initailIndex, isOriginal: compressed == false, selectAll: false, showBottomViewAndSelectBtn: true)
     }
 }
 

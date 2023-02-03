@@ -21,6 +21,8 @@ public class MHPickerViewController: NSObject {
     public var maxLimit: Int = 20
     /// 配色方案
     public var hue: MHPickerViewController.Hue = .default()
+    /// 是否压缩
+    public var compressed: Bool = true
     
     // MARK: 私有属性
     
@@ -133,6 +135,7 @@ extension MHPickerViewController {
                                        userInfo: [NSLocalizedDescriptionKey: "媒体资源获取失败 \(assets)"])
             self.completionHandler(.failure(error))
         }
+        obj.isSelectOriginal = compressed == false
         obj.showPhotoLibrary(sender: target)
     }
 }
