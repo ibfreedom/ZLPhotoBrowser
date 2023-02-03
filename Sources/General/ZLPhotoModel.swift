@@ -35,6 +35,12 @@ public extension ZLPhotoModel {
         case gif
         case livePhoto
         case video
+        
+        /// 是否是图片类型
+        internal var isImage: Bool {
+            let elements: [Self] = [.image, .gif, .livePhoto]
+            return elements.contains(self)
+        }
     }
     
 }
@@ -158,7 +164,7 @@ extension ZLPhotoModel {
     
     /// Int
     internal var compressBytes: Int {
-        if type != .image || asset.zl.fileSize < ZLPhotoConfiguration.default().compressBytes {
+        if type.isImage == false || asset.zl.fileSize < ZLPhotoConfiguration.default().compressBytes {
             return asset.zl.fileSize
         } else {
             return ZLPhotoConfiguration.default().compressBytes

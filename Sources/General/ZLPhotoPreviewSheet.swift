@@ -280,20 +280,18 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     /// 传入已选择的assets，并预览
-    @objc public func previewAssets(
-        sender: UIViewController,
-        assets: [PHAsset],
-        index: Int,
-        isOriginal: Bool,
-        showBottomViewAndSelectBtn: Bool = true
-    ) {
+    @objc public func previewAssets(sender: UIViewController, assets: [PHAsset], index: Int, isOriginal: Bool, selectAll: Bool = true, showBottomViewAndSelectBtn: Bool = true) {
         let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
             let m = ZLPhotoModel(asset: asset)
-            m.isSelected = true
+            m.isSelected = selectAll
             return m
         }
-        arrSelectedModels.removeAll()
-        arrSelectedModels.append(contentsOf: models)
+        if selectAll == true {
+            arrSelectedModels.removeAll()
+            arrSelectedModels.append(contentsOf: models)
+        } else {
+            arrSelectedModels.removeAll()
+        }
         self.sender = sender
         isSelectOriginal = isOriginal
         isHidden = true

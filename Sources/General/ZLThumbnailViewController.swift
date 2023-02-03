@@ -567,14 +567,16 @@ class ZLThumbnailViewController: UIViewController {
     /// 是否压缩图片
     /// - Parameter sender: UIButton
     @objc private func compressActionHandler(_ sender: UIButton) {
-        sender.imageView?.layer.removeAllAnimations()
+        guard sender.imageView?.layer.animation(forKey: "springAnimation") == nil else { return }
         if sender.isSelected == false, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect == true {
-            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
+            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: "springAnimation")
         }
         sender.isSelected.toggle()
+        objc_sync_enter(self)
         (navigationController as? ZLImageNavController)?.isSelectedOriginal = sender.isSelected == false
+        objc_sync_exit(self)
         // 刷新UI
-        resetBottomToolBtnStatus()
+        resetBottomToolBtnStatus(force: true)
     }
     
     @objc private func doneBtnClick() {
@@ -792,8 +794,8 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
-    private func resetBottomToolBtnStatus() {
-        guard shouldShowBottomToolBar() else { return }
+    private func resetBottomToolBtnStatus(force: Bool = false) {
+        guard shouldShowBottomToolBar() || force == true else { return }
         guard let nav = navigationController as? ZLImageNavController else {
             zlLoggerInDebug("Navigation controller is null")
             return

@@ -744,14 +744,16 @@ class ZLPhotoPreviewController: UIViewController {
     /// compressActionHandler
     /// - Parameter sender: UIButton
     @objc private func compressActionHandler(_ sender: UIButton) {
-        guard let navi = navigationController as? ZLImageNavController else { return }
-        sender.imageView?.layer.removeAllAnimations()
+        guard sender.imageView?.layer.animation(forKey: "springAnimation") == nil else { return }
         if sender.isSelected == false, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect == true {
-            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
+            sender.imageView?.layer.add(ZLAnimationUtils.springAnimation(), forKey: "springAnimation")
         }
+        guard let navi = navigationController as? ZLImageNavController else { return }
         // 更新状态
         sender.isSelected.toggle()
+        objc_sync_enter(self)
         navi.isSelectedOriginal = sender.isSelected == false
+        objc_sync_exit(self)
         // 更新Ui
         refreshBottomViewUIs()
     }

@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 public class MHPreviewController: NSObject {
-    public typealias Element = (asset: PHAsset, image: UIImage, index: Int)
+    public typealias Element = MHPickerViewController.Element
     public typealias Hue = MHPickerViewController.Hue
     
     // MARK: 公开属性
@@ -22,8 +22,8 @@ public class MHPreviewController: NSObject {
     
     // MARK: 私有属性
     
-    /// (Result<(elements: [Element], isOriginal: Bool), Error>) -> Void
-    private let completionHandler: (Result<(elements: [Element], isOriginal: Bool), Error>) -> Void
+    /// (Result<(elements: [Element], original: Bool), Error>) -> Void
+    private let completionHandler: (Result<(elements: [Element], original: Bool), Error>) -> Void
     /// 起始位置
     private let initailIndex: Int
     /// [PHAsset]
@@ -31,8 +31,17 @@ public class MHPreviewController: NSObject {
     
     // MARK: 生命周期
     
-
-    public init(elements: [PHAsset], initailIndex: Int = 0, maxLimit: Int = 20, completionHandler: @escaping (Result<(elements: [Element], isOriginal: Bool), Error>) -> Void) {
+    
+    /// 构建
+    /// - Parameters:
+    ///   - elements: [PHAsset]
+    ///   - initailIndex: Int
+    ///   - maxLimit: Int
+    ///   - completionHandler: @escaping (Result<(elements: [Element], original: Bool), Error>) -> Void
+    public init(elements: [PHAsset],
+                initailIndex: Int = 0,
+                maxLimit: Int = 20,
+                completionHandler: @escaping (Result<(elements: [Element], original: Bool), Error>) -> Void) {
         self.elements = elements
         self.initailIndex = initailIndex
         self.completionHandler = completionHandler
@@ -109,6 +118,7 @@ extension MHPreviewController {
                                        userInfo: [NSLocalizedDescriptionKey: "媒体资源获取失败 \(assets)"])
             self.completionHandler(.failure(error))
         }
-        obj.previewAssets(sender: target, assets: elements, index: initailIndex, isOriginal: false, showBottomViewAndSelectBtn: true)
+        obj.previewAssets(sender: target, assets: elements, index: initailIndex, isOriginal: false, selectAll: false, showBottomViewAndSelectBtn: true)
     }
 }
+

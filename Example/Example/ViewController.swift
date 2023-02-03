@@ -248,12 +248,13 @@ class ViewController: UIViewController {
                 self.selectedAssets = elements.map { $0.asset }
                 self.isOriginal = original
                 self.collectionView.reloadData()
+                
+                print("bytes =>", elements.bytes(for: original))
             case .failure(_):
                 break
             }
         }
         controller.hue = .default()
-        controller.maxLimit = 5
         controller.show(onTarget: self)
         
         
@@ -469,12 +470,12 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
                 self.selectedAssets = elements.map { $0.asset }
                 self.isOriginal = original
                 self.collectionView.reloadData()
+                print("bytes =>", elements.bytes(for: original))
             case .failure(_):
                 break
             }
         }
         controller.hue = .default()
-        controller.maxLimit = 3
         controller.show(onTarget: self)
         
     }

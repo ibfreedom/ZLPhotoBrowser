@@ -42,3 +42,19 @@ extension ZLPhotoBrowserWrapper where Base == [ZLResultModel] {
         }.map { $0.element }
     }
 }
+
+extension Array where Element == MHPickerViewController.Element {
+    
+    /// bytes for original
+    /// - Parameter original: Bool
+    /// - Returns: Int
+    public func bytes(for original: Bool) -> Int {
+        let models: [ZLPhotoModel] = self.map { .init(asset: $0.asset) }
+        if original == false {
+            return models.reduce(0, { $0 + $1.compressBytes})
+        } else {
+            return models.reduce(0, { $0 + $1.asset.zl.fileSize })
+        }
+    }
+}
+
