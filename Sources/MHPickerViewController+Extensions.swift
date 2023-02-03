@@ -27,7 +27,37 @@ extension MHPickerViewController.Options {
     
     /// 默认项
     public static var `default`: Self {
-        return [.allowsImage, .allowsVideo, .allowsGIF, .allowsTakePhotoInLibrary, .allowsCompressImage, allowsBytes]
+        return [
+            .allowsImage,
+            .allowsVideo,
+            .allowsGIF,
+            .allowsTakePhotoInLibrary,
+            .allowsCompressImage,
+            .allowsBytes,
+            .allowsPreview
+        ]
+    }
+    
+    /// 仅限图片
+    public static var onlyImages: Self {
+        return [
+            .allowsImage,
+            .allowsGIF,
+            .allowsTakePhotoInLibrary,
+            .allowsCompressImage,
+            .allowsBytes,
+            .allowsPreview
+        ]
+    }
+    
+    /// 仅限视频
+    public static var onlyVideos: Self {
+        return [
+            .allowsVideo,
+            .allowsTakePhotoInLibrary,
+            .allowsBytes,
+            .allowsPreview
+        ]
     }
 }
 
@@ -60,6 +90,11 @@ extension MHPickerViewController.Options {
     
     /// 允许资源大小
     public static var allowsBytes: Self {
+        return .init(rawValue: 1 << 5)
+    }
+    
+    /// 允许预览
+    public static var allowsPreview: Self {
         return .init(rawValue: 1 << 5)
     }
   
