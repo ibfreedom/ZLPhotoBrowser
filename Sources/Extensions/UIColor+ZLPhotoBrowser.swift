@@ -168,6 +168,11 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
         ZLPhotoUIConfiguration.default().bottomToolViewBtnDisableTitleColor
     }
     
+    /// bottomToolPlaceholderColor
+    static var bottomToolPlaceholderColor: UIColor {
+        ZLPhotoUIConfiguration.default().bottomToolPlaceholderColor
+    }
+    
     /// 相册列表界面底部工具栏 `完成` 按钮 不可交互 状态标题颜色
     static var bottomToolViewDoneBtnDisableTitleColor: UIColor {
         ZLPhotoUIConfiguration.default().bottomToolViewDoneBtnDisableTitleColor

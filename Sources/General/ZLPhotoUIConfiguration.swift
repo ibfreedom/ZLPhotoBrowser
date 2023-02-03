@@ -300,6 +300,8 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 相册小图界面底部按钮不可交互状态下标题颜色，不包括 `完成` 按钮
     @objc public var bottomToolViewBtnDisableTitleColor: UIColor = .zl.rgba(168, 168, 168)
     
+    @objc public var bottomToolPlaceholderColor: UIColor = .darkGray
+    
     /// The disable state title color of bottom tool view done button.
     /// 相册小图界面底部 `完成` 按钮不可交互状态下标题颜色
     @objc public var bottomToolViewDoneBtnDisableTitleColor: UIColor = .zl.rgba(168, 168, 168)

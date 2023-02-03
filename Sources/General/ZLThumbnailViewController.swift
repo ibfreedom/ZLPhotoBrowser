@@ -128,11 +128,10 @@ class ZLThumbnailViewController: UIViewController {
     private lazy var bytesLabel: UILabel = {
         let _label: UILabel = .init(frame: .zero)
         _label.font = ZLLayout.bottomToolTitleFont
-        _label.textColor = .zl.bottomToolViewBtnDisableTitleColor
+        _label.textColor = .zl.bottomToolPlaceholderColor
         _label.textAlignment = .center
         _label.adjustsFontSizeToFitWidth = true
         _label.isHidden = ZLPhotoConfiguration.default().allowSelectOriginal == true || ZLPhotoConfiguration.default().allowBytes == false
-        _label.text = "已选择2个文件(6.9M)"
         return _label
     }()
     
