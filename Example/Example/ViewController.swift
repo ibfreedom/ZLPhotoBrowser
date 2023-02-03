@@ -151,19 +151,21 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
-        let controller: MHPickerViewController = .init(options: .default) { evt in
-            switch evt {
-            case .success((let elements, let isOriginal)):
-                print(elements.count, isOriginal)
-            case .failure(let error):
-                print(error)
-            }
-        }
-        controller.hue = .default()
-        controller.maxLimit = 9
-        controller.show(onTarget: self)
         
-        return
+        // MHPickerViewController
+//        let controller: MHPickerViewController = .init(options: .default) { evt in
+//            switch evt {
+//            case .success((let elements, let isOriginal)):
+//                print(elements.count, isOriginal)
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//        controller.hue = .default()
+//        controller.maxLimit = 9
+//        controller.show(onTarget: self)
+//
+//        return
         
         
         let minItemSpacing: CGFloat = 2
@@ -238,18 +240,36 @@ class ViewController: UIViewController {
 //            guard !self.selectedAssets.isEmpty else { return }
 //            self?.saveAsset(self.selectedAssets[0])
         }
-        ac.cancelBlock = {
-            debugPrint("cancel select")
-        }
-        ac.selectImageRequestErrorBlock = { errorAssets, errorIndexs in
-            debugPrint("fetch error assets: \(errorAssets), error indexs: \(errorIndexs)")
-        }
         
-        if preview {
-            ac.showPreview(animate: true, sender: self)
-        } else {
-            ac.showPhotoLibrary(sender: self)
+        let controller: MHPickerViewController = .init(options: .default) {[unowned self] evt in
+            switch evt {
+            case .success((let elements, let original)):
+                self.selectedImages = elements.map { $0.image }
+                self.selectedAssets = elements.map { $0.asset }
+                self.isOriginal = original
+                self.collectionView.reloadData()
+            case .failure(_):
+                break
+            }
         }
+        controller.hue = .default()
+        controller.maxLimit = 5
+        controller.show(onTarget: self)
+        
+        
+//        ac.cancelBlock = {
+//            debugPrint("cancel select")
+//        }
+//        ac.selectImageRequestErrorBlock = { errorAssets, errorIndexs in
+//            debugPrint("fetch error assets: \(errorAssets), error indexs: \(errorIndexs)")
+//        }
+//
+//        if preview {
+//            ZLPhotoConfiguration.default().maxSelectCount = 3
+//            ac.showPreview(animate: true, sender: self)
+//        } else {
+//            ac.showPhotoLibrary(sender: self)
+//        }
     }
     
     func saveAsset(_ asset: PHAsset) {
@@ -425,21 +445,37 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let ac = ZLPhotoPreviewSheet()
+//        let ac = ZLPhotoPreviewSheet()
+//
+//        ac.selectImageBlock = { [weak self] results, isOriginal in
+//            guard let `self` = self else { return }
+//            self.selectedResults = results
+//            self.selectedImages = results.map { $0.image }
+//            self.selectedAssets = results.map { $0.asset }
+//            self.isOriginal = isOriginal
+//            self.collectionView.reloadData()
+//            debugPrint("images: \(self.selectedImages)")
+//            debugPrint("assets: \(self.selectedAssets)")
+//            debugPrint("isEdited: \(results.map { $0.isEdited })")
+//            debugPrint("isOriginal: \(isOriginal)")
+//        }
+//
+//        ac.previewAssets(sender: self, assets: selectedAssets, index: indexPath.row, isOriginal: isOriginal, showBottomViewAndSelectBtn: true)
         
-        ac.selectImageBlock = { [weak self] results, isOriginal in
-            guard let `self` = self else { return }
-            self.selectedResults = results
-            self.selectedImages = results.map { $0.image }
-            self.selectedAssets = results.map { $0.asset }
-            self.isOriginal = isOriginal
-            self.collectionView.reloadData()
-            debugPrint("images: \(self.selectedImages)")
-            debugPrint("assets: \(self.selectedAssets)")
-            debugPrint("isEdited: \(results.map { $0.isEdited })")
-            debugPrint("isOriginal: \(isOriginal)")
+        let controller: MHPreviewController = .init(elements: selectedAssets, initailIndex: indexPath.row, maxLimit: 3) {[unowned self] evt in
+            switch evt {
+            case .success((let elements, let original)):
+                self.selectedImages = elements.map { $0.image }
+                self.selectedAssets = elements.map { $0.asset }
+                self.isOriginal = original
+                self.collectionView.reloadData()
+            case .failure(_):
+                break
+            }
         }
+        controller.hue = .default()
+        controller.maxLimit = 3
+        controller.show(onTarget: self)
         
-        ac.previewAssets(sender: self, assets: selectedAssets, index: indexPath.row, isOriginal: isOriginal, showBottomViewAndSelectBtn: true)
     }
 }

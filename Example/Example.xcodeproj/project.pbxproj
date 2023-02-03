@@ -108,7 +108,6 @@
 		E4C911AF24E283DA0061DA40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4C911AD24E283DA0061DA40 /* LaunchScreen.storyboard */; };
 		E4CF57F624EA974F00BEBFC6 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CF57F124EA970A00BEBFC6 /* ZLPhotoBrowser.framework */; };
 		E4CF57F724EA974F00BEBFC6 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4CF57F124EA970A00BEBFC6 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		EDAE08DD298CEEF80073AB96 /* MHPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAE08DC298CEEF80073AB96 /* MHPreviewController.swift */; };
 		FD7274B5286EC7C400FF8CAD /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B4286EC7C400FF8CAD /* CustomAlertController.swift */; };
 		FD7274B8286ECBE300FF8CAD /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B7286ECBE300FF8CAD /* UIColor+Hex.swift */; };
 		FD7274BA286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B9286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift */; };
@@ -239,7 +238,6 @@
 		E4C911AE24E283DA0061DA40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4C911B024E283DA0061DA40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4CF57F124EA970A00BEBFC6 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EDAE08DC298CEEF80073AB96 /* MHPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MHPreviewController.swift; sourceTree = "<group>"; };
 		FD53DB342769D6B00093E815 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		FD53DB352769D6B00093E815 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FD53DB362769D6B90093E815 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
@@ -490,7 +488,6 @@
 				E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */,
 				E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
-				EDAE08DC298CEEF80073AB96 /* MHPreviewController.swift */,
 				E4C911A824E283D80061DA40 /* Main.storyboard */,
 				E4C911AB24E283DA0061DA40 /* Assets.xcassets */,
 				E4C911AD24E283DA0061DA40 /* LaunchScreen.storyboard */,
@@ -678,7 +675,6 @@
 				E4A410D024F39F0000EEC20B /* UILayoutSupport+Extensions.swift in Sources */,
 				E4A410C124F39F0000EEC20B /* LayoutConstraintItem.swift in Sources */,
 				E4A410DC24F39F0000EEC20B /* ConstraintItem.swift in Sources */,
-				EDAE08DD298CEEF80073AB96 /* MHPreviewController.swift in Sources */,
 				E4765F93254189E4007B2C0F /* Placeholder.swift in Sources */,
 				E4A410E224F39F0000EEC20B /* ConstraintLayoutGuide+Extensions.swift in Sources */,
 				E4765FA4254189E4007B2C0F /* Result.swift in Sources */,
