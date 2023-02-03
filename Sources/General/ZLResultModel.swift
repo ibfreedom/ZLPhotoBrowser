@@ -38,6 +38,9 @@ public class ZLResultModel: NSObject {
     /// Content of the last edit. Always nil when `saveNewImageAfterEdit = true`.
     @objc public let editModel: ZLEditImageModel?
     
+    /// AVURLAsset
+    @objc public var urlAsset: AVURLAsset?
+    
     /// The order in which the user selects the models in the album. This index is not necessarily equal to the order of the model's index in the array, as some PHAssets requests may fail.
     @objc public let index: Int
     

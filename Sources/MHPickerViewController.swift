@@ -11,7 +11,7 @@ import Photos
 
 /// MHPickerViewController
 public class MHPickerViewController: NSObject {
-    public typealias Element = (asset: PHAsset, image: UIImage, index: Int)
+    public typealias Element = (asset: PHAsset, urlAsset: AVURLAsset?, image: UIImage, index: Int)
     
     // MARK: 公开属性
     
@@ -110,9 +110,22 @@ extension MHPickerViewController {
          
         // show on target
         let obj: ZLPhotoPreviewSheet = .init(results: results)
-        obj.selectImageBlock = { (models, isOriginal) in
-            let elements: [Element] = models.map { ($0.asset, $0.image, $0.index) }
-            self.completionHandler(.success((elements, isOriginal)))
+        obj.selectImageBlock = { (models, original) in
+            if models.contains(where: { $0.asset.mediaType == .video }) == true {
+                let videos: [ZLResultModel] = models.filter { $0.asset.mediaType == .video }
+                ZLPhotoManager.fetchAVAssets(for: videos.map { $0.asset }) { elements in
+                    for element in elements {
+                        guard let urlAsset = element.avAsset as? AVURLAsset else { continue }
+                        models.first(where: { $0.asset.localIdentifier == element.phAsset.localIdentifier })?.urlAsset = urlAsset
+                    }
+                    // callback
+                    let elements: [Element] = models.map { ($0.asset, $0.urlAsset, $0.image, $0.index) }
+                    self.completionHandler(.success((elements, original)))
+                }
+            } else {
+                let elements: [Element] = models.map { ($0.asset, $0.urlAsset, $0.image, $0.index) }
+                self.completionHandler(.success((elements, original)))
+            }
         }
         obj.selectImageRequestErrorBlock = {(assets, _) in
             let error: NSError = .init(domain: "MHPickerViewController",

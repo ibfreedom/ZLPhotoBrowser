@@ -361,6 +361,7 @@ public class ZLPhotoManager: NSObject {
         return false
     }
     
+    @discardableResult
     @objc public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {
         let options = PHVideoRequestOptions()
         options.deliveryMode = .automatic
@@ -381,6 +382,24 @@ public class ZLPhotoManager: NSObject {
             return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, info in
                 ZLMainAsync {
                     completion(avAsset, info)
+                }
+            }
+        }
+    }
+    
+    /// fetchAVAssets
+    /// - Parameters:
+    ///   - assets: [PHAsset]
+    ///   - completion: ([(avAsset: AVAsset?, userinfo: [AnyHashable: Any]?)]) -> Void
+    public class func fetchAVAssets(for assets: [PHAsset], completion: @escaping ([(phAsset: PHAsset, avAsset: AVAsset?, userinfo: [AnyHashable: Any]?)]) -> Void) {
+        var count: Int = assets.count
+        var elements: [(phAsset: PHAsset, avAsset: AVAsset?, userinfo: [AnyHashable: Any]?)] = []
+        for asset in assets {
+            fetchAVAsset(forVideo: asset) { avAsset, userinfo in
+                elements.append((asset, avAsset, userinfo))
+                count -= 1
+                if count == 0 {
+                    completion(elements)
                 }
             }
         }

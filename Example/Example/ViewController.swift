@@ -241,7 +241,7 @@ class ViewController: UIViewController {
 //            self?.saveAsset(self.selectedAssets[0])
         }
         
-        let controller: MHPickerViewController = .init(options: .onlyImages.subtracting(.allowsPreview)) {[unowned self] evt in
+        let controller: MHPickerViewController = .init(options: .default) {[unowned self] evt in
             switch evt {
             case .success((let elements, let original)):
                 self.selectedImages = elements.map { $0.image }
